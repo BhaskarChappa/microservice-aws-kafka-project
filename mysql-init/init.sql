@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS micro_user_db;
+
+CREATE DATABASE IF NOT EXISTS micro_order_db;
+
+CREATE DATABASE IF NOT EXISTS micro_payment_db;

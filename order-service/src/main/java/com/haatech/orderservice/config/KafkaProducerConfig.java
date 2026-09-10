@@ -3,6 +3,7 @@ package com.haatech.orderservice.config;
 import com.haatech.orderservice.event.OrderCreatedEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -16,6 +17,9 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
+    @Value("${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}")
+    private String bootstrapServers;
+
     @Bean
     public ProducerFactory<String, OrderCreatedEvent> producerFactory() {
 
@@ -23,7 +27,7 @@ public class KafkaProducerConfig {
 
         properties.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                "localhost:9092"
+                bootstrapServers
         );
 
         properties.put(
@@ -36,8 +40,7 @@ public class KafkaProducerConfig {
                 JacksonJsonSerializer.class
         );
 
-        // IMPORTANT:
-        // Do not send the Java class name in Kafka headers
+        // Do not send Java package/class information in Kafka headers
         properties.put(
                 "spring.json.add.type.headers",
                 false
