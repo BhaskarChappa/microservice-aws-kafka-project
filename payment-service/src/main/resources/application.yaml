@@ -1,14 +1,14 @@
 server:
-  port: 8083
+  port: ${SERVER_PORT:8083}
 
 spring:
   application:
     name: payment-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/micro_payment_db
-    username: root
-    password: root
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:micro_payment_db}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
 
   jpa:
     hibernate:
@@ -16,12 +16,16 @@ spring:
     show-sql: true
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
     consumer:
-      group-id: payment-service
+      group-id: ${KAFKA_CONSUMER_GROUP:payment-service}
       auto-offset-reset: earliest
+
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
       value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+
       properties:
         spring.json.value.default.type: com.haatech.paymentservice.event.OrderCreatedEvent
         spring.json.trusted.packages: com.haatech.paymentservice.event
